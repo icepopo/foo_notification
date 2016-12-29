@@ -21,12 +21,21 @@
     <ClInclude Include="foo_notification.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StringReferenceWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="windows_notification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="foo_notification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="windows_notification.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
