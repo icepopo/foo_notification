@@ -92,16 +92,11 @@ void foo_notification::on_playback_new_track(metadb_handle_ptr p_track) {
 
 wchar_t* foo_notification::cstrToWchar(const char *string) {
 	const size_t cSize = strlen(string) + 1;
-	wchar_t* wc = new wchar_t[cSize];//check for nullptr
+	wchar_t* wc = new wchar_t[cSize];//TODO(Artur): Check for nullptr
 	mbstowcs(wc, string, cSize);
 
 	return wc;
 }
-
-/*
- * Code taken from
- * http://foosion.foobar2000.org/
- */
 
 // Identifier of our context menu group. Substitute with your own when reusing code.
 static const GUID guid_mygroup = { 0x572de7f4, 0xcbdf, 0x479a,{ 0x97, 0x26, 0xa, 0xb0, 0x97, 0x47, 0x69, 0xe3 } };
