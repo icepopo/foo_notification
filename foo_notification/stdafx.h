@@ -1,7 +1,7 @@
 #pragma once
-//#pragma warning(disable : 4996) //get version deprecated
+#pragma warning(disable : 4996) //get version deprecated
 #include "../../foobar2000/SDK/foobar2000.h"
-//#include "../../foobar2000/ATLHelpers/ATLHelpers.h"
+#include "../../foobar2000/ATLHelpers/ATLHelpers.h"
 
 // Toast Notification
 #pragma comment(linker,"\"/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
