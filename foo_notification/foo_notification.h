@@ -1,9 +1,8 @@
 #include "stdafx.h"
 
-using namespace Microsoft::WRL;
-using namespace ABI::Windows::UI::Notifications;
-using namespace ABI::Windows::Data::Xml::Dom;
-using namespace Windows::Foundation;
+#define COMPONENT_NAME "Foo Notification"
+#define COMPONENT_DLL_NAME "foo_notification"
+#define NOTIFICATION_APP_NAME L"Foobar 2000"
 
 class foo_notification :
 	public initquit,

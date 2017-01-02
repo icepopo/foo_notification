@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "windows_notification.h"
+#include "foo_notification.h"
 
-const wchar_t AppId[] = L"Foobar2000";
 
 HRESULT windows_notification::TryCreateShortcut() {
 	wchar_t shortcutPath[MAX_PATH];
@@ -9,7 +9,7 @@ HRESULT windows_notification::TryCreateShortcut() {
 	HRESULT hr = charWritten > 0 ? S_OK : E_INVALIDARG;
 
 	if (SUCCEEDED(hr)) {
-		errno_t concatError = wcscat_s(shortcutPath, ARRAYSIZE(shortcutPath), L"\\Microsoft\\Windows\\Start Menu\\Programs\\Foobar 2000.lnk");
+		errno_t concatError = wcscat_s(shortcutPath, ARRAYSIZE(shortcutPath), L"\\Microsoft\\Windows\\Start Menu\\Programs\\Foobar 2000.lnk"); //TODO: Maybe get the name from define
 		hr = concatError == 0 ? S_OK : E_INVALIDARG;
 		if (SUCCEEDED(hr)) {
 			DWORD attributes = GetFileAttributes(shortcutPath);
@@ -47,7 +47,7 @@ HRESULT windows_notification::InstallShortcut(_In_z_ wchar_t *shortcutPath) {
 					hr = shellLink.As(&propertyStore);
 					if (SUCCEEDED(hr)) {
 						PROPVARIANT appIdPropVar;
-						hr = InitPropVariantFromString(AppId, &appIdPropVar);
+						hr = InitPropVariantFromString(NOTIFICATION_APP_NAME, &appIdPropVar);
 						if (SUCCEEDED(hr)) {
 							hr = propertyStore->SetValue(PKEY_AppUserModel_ID, appIdPropVar);
 							if (SUCCEEDED(hr)) {
@@ -178,7 +178,7 @@ HRESULT windows_notification::SetNodeValueString(_In_ HSTRING inputString, _In_ 
 // Create and display the toast
 HRESULT windows_notification::CreateToast(_In_ IToastNotificationManagerStatics *toastManager, _In_ IXmlDocument *xml) {
 	ComPtr<IToastNotifier> notifier;
-	HRESULT hr = toastManager->CreateToastNotifierWithId(StringReferenceWrapper(AppId).Get(), &notifier);
+	HRESULT hr = toastManager->CreateToastNotifierWithId(StringReferenceWrapper(NOTIFICATION_APP_NAME).Get(), &notifier);
 	if (SUCCEEDED(hr)) {
 		ComPtr<IToastNotificationFactory> factory;
 		hr = GetActivationFactory(StringReferenceWrapper(RuntimeClass_Windows_UI_Notifications_ToastNotification).Get(), &factory);

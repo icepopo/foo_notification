@@ -1,3 +1,7 @@
+/* Code taken, and modified, from MSDN tutorial
+* https://code.msdn.microsoft.com/windowsdesktop/sending-toast-notifications-71e230a2/
+*/
+
 class StringReferenceWrapper
 {  
 public:  

@@ -54,11 +54,6 @@ IDD_MYPREFERENCES DIALOGEX 0, 0, 332, 288
 STYLE DS_SETFONT | WS_CHILD
 FONT 8, "Microsoft Sans Serif", 400, 0, 0x0
 BEGIN
-    RTEXT           "Bogo setting 1:",IDC_STATIC,194,226,59,8
-    EDITTEXT        IDC_BOGO1,265,240,40,12,ES_AUTOHSCROLL | ES_NUMBER
-    RTEXT           "Bogo setting 2:",IDC_STATIC,189,242,59,8
-    EDITTEXT        IDC_BOGO2,285,214,40,12,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "This is a sample preferences page with meaningless settings.",IDC_STATIC,110,262,204,8
     CONTROL         "Artist",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,18,31,10
     CONTROL         "Album",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,30,35,10
     CONTROL         "Song",IDC_CHECK3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,41,33,10
