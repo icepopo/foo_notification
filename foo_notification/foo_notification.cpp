@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "foo_notification.h"
 #include "windows_notification.h"
+/*
+ * TODO: FIX ALL THE GUIDs
+ */
 
 DECLARE_COMPONENT_VERSION(
 COMPONENT_NAME,
