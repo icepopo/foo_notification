@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 
 #define COMPONENT_NAME "Foo Notification"
@@ -14,9 +15,16 @@ public:
 	void on_quit() override;
 
 private:
+
+	wchar_t* old_songname = nullptr;
+	wchar_t* old_albumname = nullptr;
+	wchar_t* old_artistname = nullptr;
+
+
 	wchar_t* cstrToWchar(const char *string);
 	void get_track_info(metadb_handle_ptr p_track, wchar_t *&songname, wchar_t *&albumname, wchar_t *&artistname);
 	void get_track_cover(metadb_handle_ptr p_track, wchar_t*& coverpath);
+	void check_for_change(wchar_t* old_name, wchar_t* name, bool &status);
 
 	titleformat_object::ptr artist_format;
 	titleformat_object::ptr album_format;

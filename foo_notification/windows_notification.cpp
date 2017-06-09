@@ -188,6 +188,7 @@ HRESULT windows_notification::CreateToast(_In_ IToastNotificationManagerStatics 
 
 			if (SUCCEEDED(hr)) {
 				notifier->Show(toast.Get());
+				notifier->
 			}
 		}
 	}

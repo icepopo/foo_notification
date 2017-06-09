@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "foo_notification.h"
 #include "windows_notification.h"
+#include "Contextmenu.h"
+#include "Preferences.h"
 /*
  * TODO: FIX ALL THE GUIDs
  */
@@ -12,6 +14,8 @@ COMPONENT_NAME,
 );
 
 initquit_factory_t<foo_notification> g_foo;
+contextmenu_item_factory_t<Contextmenu> contextmenu_factory;
+preferences_page_factory_t<preferences_page_myimpl> g_preferences_page_myimpl_factory;
 
 void foo_notification::on_init() {
 	static_api_ptr_t<titleformat_compiler>()->compile_force(artist_format, "[%album artist%]");
@@ -70,32 +74,66 @@ void foo_notification::get_track_cover(metadb_handle_ptr p_track, wchar_t *&cove
 
 	coverpath = cstrToWchar(cover.c_str());
 }
+
+void foo_notification::check_for_change(wchar_t* old_name, wchar_t* name, bool &status) {
+	if (old_name != nullptr) {
+		if (wcscmp(old_name, name) != 0) {
+			status = true;
+		}
+	} else {
+		status = true;
+	}
+}
+
 void foo_notification::on_playback_new_track(metadb_handle_ptr p_track) {
 	wchar_t* songname = nullptr;
 	wchar_t* albumname = nullptr;
 	wchar_t* artistname = nullptr;
-	get_track_info(p_track, songname, albumname, artistname);
-
 	wchar_t* coverpath = nullptr;
-	get_track_cover(p_track, coverpath);
 
+	bool songChanged = false;
+	bool albumChanged = false;
+	bool artistChanged = false;
+
+	get_track_info(p_track, songname, albumname, artistname);
+	get_track_cover(p_track, coverpath);
 
 	wchar_t* text[] = {
 		songname,
 		artistname,
 		albumname
 	};
-	windows_notification::DisplayToast((wchar_t const*)coverpath, text);
-	
-	delete[] songname;
-	delete[] albumname;
-	delete[] artistname;
+
+	check_for_change(old_songname, songname, songChanged);
+	check_for_change(old_albumname, albumname, albumChanged);
+	check_for_change(old_artistname, artistname, artistChanged);
+
+	if (songChanged) {
+		windows_notification::DisplayToast((wchar_t const*)coverpath, text);
+	}
+
+
+	if (old_songname != nullptr) {
+		delete[] old_songname;
+	}
+
+	if (old_albumname != nullptr) {
+		delete[] old_albumname;
+	}
+
+	if (old_artistname != nullptr) {
+		delete[] old_artistname;
+	}
+
+	old_songname = songname;
+	old_albumname = albumname;
+	old_artistname = artistname;
 	delete[] coverpath;
 }
 
 wchar_t* foo_notification::cstrToWchar(const char *string) {
 	const size_t cSize = strlen(string) + 1;
-	wchar_t* wc = new wchar_t[cSize];//TODO(Artur): Check for nullptr
+	wchar_t* wc = new wchar_t[cSize];//TODO(Artur): Check for nullptrrr
 	mbstowcs(wc, string, cSize);
 
 	return wc;
