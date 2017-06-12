@@ -27,10 +27,12 @@ void Contextmenu::context_command(unsigned p_index, metadb_handle_list_cref p_da
 	case cmd_toggle:
 		//
 		Config::shuffle_mode = !Config::shuffle_mode;
+		console::formatter() << "Changed shuffle mode to: " << (Config::shuffle_mode ? "true" : "false");
 		break;
 	case cmd_onetime:
 		//
 		g_notification.show_notification_by_hand();
+		console::formatter() << "Shown a notification by hand";
 		break;
 	default:
 		uBugCheck();
@@ -51,7 +53,7 @@ GUID Contextmenu::get_item_guid(unsigned p_index) {
 bool Contextmenu::get_item_description(unsigned p_index, pfc::string_base & p_out) {
 	switch (p_index) {
 		case cmd_toggle:
-			p_out = "This command toggles shuffle mode. When active it enables showing of the notification after every song, overriding usual settings.";
+			p_out = "When active it overrides the settings and shows the notification after every song change.";
 			return true;
 		case cmd_onetime:
 			p_out = "Show a notification despite the settings.";

@@ -13,7 +13,7 @@ foo_notification g_notification;
 
 DECLARE_COMPONENT_VERSION(
 COMPONENT_NAME,
-"0.0.1",
+"0.1.0",
 "Foobar compontent showing a toast notification when asked nicely.\n"
 );
 
@@ -87,8 +87,6 @@ void foo_notification::get_track_cover(metadb_handle_ptr p_track, wchar_t *&cove
 	catch (exception_album_art_not_found) {
 		cover = "not found cover.jpg";
 	}
-	console::formatter() << "Image hopefully: " << cover;
-
 	string8ToWide(cover, coverpath);
 }
 
@@ -141,6 +139,8 @@ void foo_notification::show_notification(metadb_handle_ptr p_track, bool by_hand
 		showNotification = true;
 	} else if (artistChanged && Config::cfg_artist_checkbox) {
 		showNotification = true;
+	} else if (Config::shuffle_mode) {
+		showNotification = true;
 	}
 
 	if (showNotification) {
@@ -178,9 +178,7 @@ void foo_notification::on_playback_new_track(metadb_handle_ptr p_track) {
 }
 
 void foo_notification::debug() {
-	console::formatter() << "\n";
-	console::formatter() << Config::cfg_album_checkbox;
-	console::formatter() << "\nyeah, science!";
+	console::formatter() << "\ndebug test";
 }
 
 size_t foo_notification::string8ToWide(pfc::string8 source, wchar_t *&dest) {
