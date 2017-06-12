@@ -7,15 +7,31 @@
  * TODO: FIX ALL THE GUIDs
  */
 
+
+
+foo_notification g_notification;
+
 DECLARE_COMPONENT_VERSION(
 COMPONENT_NAME,
 "0.0.1",
 "Foobar compontent showing a toast notification when asked nicely.\n"
 );
 
-initquit_factory_t<foo_notification> g_foo;
+
+class initquit_notification : public initquit {
+	virtual void on_init() {
+		g_notification.on_init();
+	}
+	virtual void on_quit() {
+		g_notification.on_quit();
+	}
+};
+
+initquit_factory_t<initquit_notification> g_foo;
 contextmenu_item_factory_t<Contextmenu> contextmenu_factory;
 preferences_page_factory_t<preferences_page_myimpl> g_preferences_page_myimpl_factory;
+
+
 
 void foo_notification::on_init() {
 	static_api_ptr_t<titleformat_compiler>()->compile_force(artist_format, "[%album artist%]");
@@ -25,8 +41,9 @@ void foo_notification::on_init() {
 	static_api_ptr_t<play_callback_manager>()->register_callback(this,
 		flag_on_playback_new_track,
 		false);
-
-	windows_notification::TryCreateShortcut();
+	
+	wn = new windows_notification();
+	wn->TryCreateShortcut();
 }
 
 void foo_notification::on_quit() {
@@ -46,9 +63,9 @@ void foo_notification::get_track_info(metadb_handle_ptr p_track, wchar_t *&songn
 	p_track->format_title(NULL, album, album_format, NULL);
 	p_track->format_title(NULL, title, title_format, NULL);
 
-	songname = cstrToWchar(title.c_str());
-	albumname = cstrToWchar(album.c_str());
-	artistname = cstrToWchar(artist.c_str());
+	string8ToWide(artist, artistname);
+	string8ToWide(album, albumname);
+	string8ToWide(title, songname);
 }
 
 void foo_notification::get_track_cover(metadb_handle_ptr p_track, wchar_t *&coverpath) {
@@ -72,7 +89,7 @@ void foo_notification::get_track_cover(metadb_handle_ptr p_track, wchar_t *&cove
 	}
 	console::formatter() << "Image hopefully: " << cover;
 
-	coverpath = cstrToWchar(cover.c_str());
+	string8ToWide(cover, coverpath);
 }
 
 void foo_notification::check_for_change(wchar_t* old_name, wchar_t* name, bool &status) {
@@ -85,7 +102,14 @@ void foo_notification::check_for_change(wchar_t* old_name, wchar_t* name, bool &
 	}
 }
 
-void foo_notification::on_playback_new_track(metadb_handle_ptr p_track) {
+void foo_notification::show_notification_by_hand() {
+	metadb_handle_ptr p_track;
+	if (static_api_ptr_t<playback_control>()->get_now_playing(p_track)) {
+		show_notification(p_track, true);
+	}
+}
+
+void foo_notification::show_notification(metadb_handle_ptr p_track, bool by_hand) {
 	wchar_t* songname = nullptr;
 	wchar_t* albumname = nullptr;
 	wchar_t* artistname = nullptr;
@@ -108,33 +132,58 @@ void foo_notification::on_playback_new_track(metadb_handle_ptr p_track) {
 	check_for_change(old_albumname, albumname, albumChanged);
 	check_for_change(old_artistname, artistname, artistChanged);
 
-	if (songChanged) {
-		windows_notification::DisplayToast((wchar_t const*)coverpath, text);
+	bool showNotification = false;
+	if (by_hand) {
+		showNotification = true;
+	} else if (songChanged && Config::cfg_song_checkbox) {
+		showNotification = true;
+	} else if (albumChanged && Config::cfg_album_checkbox) {
+		showNotification = true;
+	} else if (artistChanged && Config::cfg_artist_checkbox) {
+		showNotification = true;
 	}
 
-
-	if (old_songname != nullptr) {
-		delete[] old_songname;
+	if (showNotification) {
+		wn->DisplayToast((wchar_t const*)coverpath, text);
 	}
 
-	if (old_albumname != nullptr) {
-		delete[] old_albumname;
-	}
+	//TODO: check if it work
+	if (by_hand) {
+		delete[] songname;
+		delete[] albumname;
+		delete[] artistname;
+	} else {
+		if (old_songname != nullptr) {
+			delete[] old_songname;
+		}
 
-	if (old_artistname != nullptr) {
-		delete[] old_artistname;
-	}
+		if (old_albumname != nullptr) {
+			delete[] old_albumname;
+		}
 
-	old_songname = songname;
-	old_albumname = albumname;
-	old_artistname = artistname;
+		if (old_artistname != nullptr) {
+			delete[] old_artistname;
+		}
+
+		old_songname = songname;
+		old_albumname = albumname;
+		old_artistname = artistname;
+	}
 	delete[] coverpath;
 }
 
-wchar_t* foo_notification::cstrToWchar(const char *string) {
-	const size_t cSize = strlen(string) + 1;
-	wchar_t* wc = new wchar_t[cSize];//TODO(Artur): Check for nullptrrr
-	mbstowcs(wc, string, cSize);
+void foo_notification::on_playback_new_track(metadb_handle_ptr p_track) {
+	show_notification(p_track);
+	//TODO: make it so you can display the notification by hand multiple times, not limited by the settings;
+}
 
-	return wc;
+void foo_notification::debug() {
+	console::formatter() << "\n";
+	console::formatter() << Config::cfg_album_checkbox;
+	console::formatter() << "\nyeah, science!";
+}
+
+size_t foo_notification::string8ToWide(pfc::string8 source, wchar_t *&dest) {
+	dest = new wchar_t[source.length()+1];// TODO: should check for nullptr ...
+	return pfc::stringcvt::convert_utf8_to_wide(dest, source.length() + 1, source, source.length() + 1);//+1 becouse the title and cover is getting cut one character
 }

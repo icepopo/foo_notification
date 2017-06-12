@@ -5,7 +5,7 @@ class Contextmenu : public contextmenu_item_simple {
 public:
 	enum {
 		cmd_toggle = 0,
-		cmd_test2,
+		cmd_onetime,
 		cmd_total
 	};
 

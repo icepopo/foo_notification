@@ -187,8 +187,11 @@ HRESULT windows_notification::CreateToast(_In_ IToastNotificationManagerStatics 
 			hr = factory->CreateToastNotification(xml, &toast);
 
 			if (SUCCEEDED(hr)) {
+				if (this->prevToast != nullptr) {
+					notifier->Hide(prevToast.Get());
+				}
 				notifier->Show(toast.Get());
-				notifier->
+				this->prevToast = toast;
 			}
 		}
 	}

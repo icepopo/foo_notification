@@ -2,31 +2,37 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "foo_notification.h"
-static const GUID guid_artist_checkbox = { 0x9cd130f7, 0x5d80, 0x4804,{ 0x9b, 0x79, 0x11, 0xee, 0xcb, 0xd6 } };
-static const bool cfg_artist_checkbox_default = false;
-static cfg_bool cfg_artist_checkbox(guid_artist_checkbox, cfg_artist_checkbox_default);
 
-static const GUID guid_album_checkbox = { 0x67ef4917, 0x9a23, 0x480a,{ 0x80, 0x59, 0x5d, 0xb9, 0xa4, 0x6b } };
-static const bool cfg_album_checkbox_default = false;
-static cfg_bool cfg_album_checkbox(guid_album_checkbox, cfg_album_checkbox_default);
+namespace Config {
+	extern const GUID guid_artist_checkbox;
+	extern const bool cfg_artist_checkbox_default;
+	extern cfg_bool cfg_artist_checkbox;
 
-static const GUID guid_song_checkbox = { 0x1b547b01, 0x17dd, 0x4cb6,{ 0xb9, 0x67, 0x84, 0x24, 0x39, 0x55 } };
-static const bool cfg_song_checkbox_default = true;
-static cfg_bool cfg_song_checkbox(guid_song_checkbox, cfg_album_checkbox_default);
+	extern const GUID guid_album_checkbox;
+	extern const bool cfg_album_checkbox_default;
+	extern cfg_bool cfg_album_checkbox;
 
-static const GUID guid_cfg_format1 = { 0xa1b8a78d, 0x460f, 0x471a,{ 0xbf, 0x02, 0xfd, 0x89, 0x82, 0x8d } };
-static const char *cfg_format1_default = "%artist%";
-static cfg_string cfg_format1(guid_cfg_format1, cfg_format1_default);
+	extern const GUID guid_song_checkbox;
+	extern const bool cfg_song_checkbox_default;
+	extern cfg_bool cfg_song_checkbox;
 
-static const GUID guid_cfg_format2 = { 0x723c6622, 0xdf03, 0x4cfa,{ 0xb4, 0x66, 0x2d, 0x88, 0x7d, 0xdd } };
-static const char *cfg_format2_default = "%album%";
-static cfg_string cfg_format2(guid_cfg_format2, cfg_format2_default);
+	extern const GUID guid_cfg_format1;
+	extern const char *cfg_format1_default;
+	extern cfg_string cfg_format1;
 
-static const GUID guid_cfg_format3 = { 0x583fef1c, 0xd048, 0x48ca,{ 0x8e, 0xe3, 0x2b, 0x1b, 0x03, 0xd2 } };
-static const char *cfg_format3_default = "%title%";
-static cfg_string cfg_format3(guid_cfg_format3, cfg_format3_default);
+	extern const GUID guid_cfg_format2;
+	extern const char *cfg_format2_default;
+	extern cfg_string cfg_format2;
 
- const GUID guid_preference_page = { 0x290cd872 , 0xcab3, 0x4756,{ 0x95, 0x40, 0xd2, 0x9b, 0xc3, 0xeb } };
+	extern const GUID guid_cfg_format3;
+	extern const char *cfg_format3_default;
+	extern cfg_string cfg_format3;
+
+	extern bool shuffle_mode;
+}
+
+
+const GUID guid_preference_page = { 0x290cd872 , 0xcab3, 0x4756,{ 0x95, 0x40, 0xd2, 0x9b, 0xc3, 0xeb } };
 
 class Preferences : public CDialogImpl<Preferences>, public preferences_page_instance {
 	CCheckBox artist_checkbox;
