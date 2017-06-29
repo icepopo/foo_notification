@@ -12,15 +12,26 @@ It is also possible to show the notification by hand, or to temporarily override
 Another feature is a possibility to toggle between default playback mode and random playback mode.
 
 ![](http://i.imgur.com/h3RQ5yM.png)
+
 All these options are available through context menu, but it is suggested to set up the keybindings.
+
+# Configuration
+
+For configuration go to the settings, and set when notifications will be displayed
+
+![](http://i.imgur.com/xdZ3SM0.png)
+
+If you want to setup keybindings go to the preferences. Below are presented example keybindings.
+
+![](http://i.imgur.com/4zseR4o.png)
 
 # Download
 You can download this component from the [release](https://github.com/icepopo/foo_notification/releases) section 
 
 # Building
 To build the project you need the following direcory structure with the foobar sdk present. The portable instalation is used for development.
-    .
-    ├── foobar2000         <-- SDK
-    ├── foo_notification   <-- this repository
-    ├── pfc                <-- SDK
-    └── test               <-- portable instalation of foobar2000
+      .
+      ├── foobar2000         <-- SDK
+      ├── foo_notification   <-- this repository
+      ├── pfc                <-- SDK
+      └── test               <-- portable instalation of foobar2000
