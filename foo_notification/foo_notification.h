@@ -26,7 +26,7 @@ private:
 	wchar_t* old_artistname = nullptr;
 
 	void show_notification(metadb_handle_ptr p_track, bool by_hand = false);
-	size_t string8ToWide(pfc::string8 source, wchar_t *&dest);
+	void string8ToWide(pfc::string8 source, wchar_t *&dest);
 	void get_track_info(metadb_handle_ptr p_track, wchar_t *&songname, wchar_t *&albumname, wchar_t *&artistname);
 	void get_track_cover(metadb_handle_ptr p_track, wchar_t*& coverpath);
 	void check_for_change(wchar_t* old_name, wchar_t* name, bool &status);

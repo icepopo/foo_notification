@@ -3,16 +3,13 @@
 #include "windows_notification.h"
 #include "Contextmenu.h"
 #include "Preferences.h"
-/*
- * TODO: FIX ALL THE GUIDs
- */
 
 foo_notification g_notification;
 
 DECLARE_COMPONENT_VERSION(
 COMPONENT_NAME,
 "0.1",
-"Foobar compontent showing a toast notification when asked nicely.\n"
+"Foobar compontent showing a toast notification on song/album/artist change or manually.\n"
 );
 
 class initquit_notification : public initquit {
@@ -80,7 +77,8 @@ void foo_notification::get_track_cover(metadb_handle_ptr p_track, wchar_t *&cove
 		cover = (*list).get_path(0);
 	}
 	catch (exception_album_art_not_found) {
-		cover = "not found cover.jpg";
+		cover = "not_found_cover.jpg";
+		console::formatter() << "error: song cover was not found.";
 	}
 	string8ToWide(cover, coverpath);
 }
@@ -142,7 +140,6 @@ void foo_notification::show_notification(metadb_handle_ptr p_track, bool by_hand
 		wn->DisplayToast((wchar_t const*)coverpath, text);
 	}
 
-	//TODO: check if it work
 	if (by_hand) {
 		delete[] songname;
 		delete[] albumname;
@@ -169,7 +166,6 @@ void foo_notification::show_notification(metadb_handle_ptr p_track, bool by_hand
 
 void foo_notification::on_playback_new_track(metadb_handle_ptr p_track) {
 	show_notification(p_track);
-	//TODO: make it so you can display the notification by hand multiple times, not limited by the settings;
 }
 
 void foo_notification::changedRandomMode() {
@@ -222,7 +218,11 @@ void foo_notification::changePlaybackMode() {
 	wn->DisplayToast(blank, text);
 }
 
-size_t foo_notification::string8ToWide(pfc::string8 source, wchar_t *&dest) {
-	dest = new wchar_t[source.length()+1];// TODO: should check for nullptr ...
-	return pfc::stringcvt::convert_utf8_to_wide(dest, source.length() + 1, source, source.length() + 1);//+1 becouse the title and cover is getting cut one character
+void foo_notification::string8ToWide(pfc::string8 source, wchar_t *&dest) {
+	dest = new wchar_t[source.length()+1];
+	if (dest != nullptr) {
+		pfc::stringcvt::convert_utf8_to_wide(dest, source.length() + 1, source, source.length() + 1);//+1 becouse the title and cover is getting cut one character
+	} else {
+		console::formatter() << "error: no memory available";
+	}
 }
