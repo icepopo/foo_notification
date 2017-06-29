@@ -7,16 +7,13 @@
  * TODO: FIX ALL THE GUIDs
  */
 
-
-
 foo_notification g_notification;
 
 DECLARE_COMPONENT_VERSION(
 COMPONENT_NAME,
-"0.1.0",
+"0.1",
 "Foobar compontent showing a toast notification when asked nicely.\n"
 );
-
 
 class initquit_notification : public initquit {
 	virtual void on_init() {
@@ -30,8 +27,6 @@ class initquit_notification : public initquit {
 initquit_factory_t<initquit_notification> g_foo;
 contextmenu_item_factory_t<Contextmenu> contextmenu_factory;
 preferences_page_factory_t<preferences_page_myimpl> g_preferences_page_myimpl_factory;
-
-
 
 void foo_notification::on_init() {
 	static_api_ptr_t<titleformat_compiler>()->compile_force(artist_format, "[%album artist%]");
@@ -177,8 +172,54 @@ void foo_notification::on_playback_new_track(metadb_handle_ptr p_track) {
 	//TODO: make it so you can display the notification by hand multiple times, not limited by the settings;
 }
 
-void foo_notification::debug() {
-	console::formatter() << "\ndebug test";
+void foo_notification::changedRandomMode() {
+	wchar_t* title = L"Changed settings";
+	wchar_t* shuffleOn = L"Shuffle mode was turned on";
+	wchar_t* shuffleOff = L"Shuffle mode was turned off";
+    wchar_t* blank = L"";
+	wchar_t** shuffleOption = nullptr;
+
+	if (Config::shuffle_mode) {
+		shuffleOption = &shuffleOn;
+	} else {
+		shuffleOption = &shuffleOff;
+	}
+
+	wchar_t* text[] = {
+		title,
+		*shuffleOption,
+		blank
+	};
+
+	wn->DisplayToast(blank, text);
+}
+
+void foo_notification::changePlaybackMode() {
+	wchar_t* title = L"Changed settings";
+	wchar_t* modeDefault = L"Changed playback mode to default";
+	wchar_t* modeRandom = L"Changed playback mode to random";
+	wchar_t* blank = L"";
+	wchar_t** modeOption = nullptr;
+
+	t_size active_playback = static_api_ptr_t<playlist_manager>()->playback_order_get_active();
+
+	if (active_playback == 0) {
+		modeOption = &modeRandom;
+		static_api_ptr_t<playlist_manager>()->playback_order_set_active(3);
+		Config::playback_mode = 1;
+	} else {
+		modeOption = &modeDefault;
+		static_api_ptr_t<playlist_manager>()->playback_order_set_active(0);
+		Config::playback_mode = 0;
+	}
+
+	wchar_t* text[] = {
+		title,
+		*modeOption,
+		blank
+	};
+
+	wn->DisplayToast(blank, text);
 }
 
 size_t foo_notification::string8ToWide(pfc::string8 source, wchar_t *&dest) {

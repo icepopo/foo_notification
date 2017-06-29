@@ -4,6 +4,8 @@
 #include "foo_notification.h"
 
 namespace Config {
+	extern const GUID guid_preference_page;
+
 	extern const GUID guid_artist_checkbox;
 	extern const bool cfg_artist_checkbox_default;
 	extern cfg_bool cfg_artist_checkbox;
@@ -29,10 +31,8 @@ namespace Config {
 	extern cfg_string cfg_format3;
 
 	extern bool shuffle_mode;
+	extern bool playback_mode;
 }
-
-
-const GUID guid_preference_page = { 0x290cd872 , 0xcab3, 0x4756,{ 0x95, 0x40, 0xd2, 0x9b, 0xc3, 0xeb } };
 
 class Preferences : public CDialogImpl<Preferences>, public preferences_page_instance {
 	CCheckBox artist_checkbox;

@@ -15,7 +15,8 @@ public:
 	void on_quit();
 
 	void show_notification_by_hand();
-	void debug();
+	void changedRandomMode();
+	void changePlaybackMode();
 private:
 
 	windows_notification *wn;
@@ -34,15 +35,12 @@ private:
 	titleformat_object::ptr album_format;
 	titleformat_object::ptr title_format;
 
-
-
 	abort_callback_impl abort_dummy;
 	// message_filter methods
 	bool pretranslate_message(MSG * p_msg) override;
 
 	// play_callback methods (the ones we're interested in)
 	void on_playback_new_track(metadb_handle_ptr p_track) override;
-
 
 	// play_callback methods (the rest)
 	virtual void on_playback_stop(play_control::t_stop_reason reason) {}

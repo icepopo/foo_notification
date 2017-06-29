@@ -2,6 +2,8 @@
 #include "Preferences.h"
 
 namespace Config {
+	const GUID guid_preference_page = { 0x290cd872 , 0xcab3, 0x4756,{ 0x95, 0x40, 0xd2, 0x9b, 0xc3, 0xeb } };
+
 	const GUID guid_artist_checkbox = { 0x9cd130f7, 0x5d80, 0x4804,{ 0x9b, 0x79, 0x11, 0xee, 0xcb, 0xd6 } };
     const bool cfg_artist_checkbox_default = false;
 	cfg_bool cfg_artist_checkbox(guid_artist_checkbox, cfg_artist_checkbox_default);
@@ -27,6 +29,7 @@ namespace Config {
 	cfg_string cfg_format3(guid_cfg_format3, cfg_format3_default);
 
 	bool shuffle_mode = false;
+	bool playback_mode = false;
 }
 
 BOOL Preferences::OnInitDialog(CWindow, LPARAM) {
@@ -104,7 +107,7 @@ const char * preferences_page_myimpl::get_name() {
 }
 
 GUID preferences_page_myimpl::get_guid() {
-	return guid_preference_page;
+	return Config::guid_preference_page;
 }
 
 GUID preferences_page_myimpl::get_parent_guid() {

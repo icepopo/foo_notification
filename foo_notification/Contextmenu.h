@@ -6,6 +6,7 @@ public:
 	enum {
 		cmd_toggle = 0,
 		cmd_onetime,
+		cmd_playback_mode,
 		cmd_total
 	};
 
